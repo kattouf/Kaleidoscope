@@ -1,11 +1,13 @@
 import Foundation
 
+typealias Number = Double
+
 enum Token {
     case punctuation(Punctuation)
     case keyword(Keyword)
     case `operator`(BinaryOperator)
     case identifier(String)
-    case number(Double)
+    case number(Number)
 }
 
 enum Punctuation: Character {

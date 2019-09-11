@@ -91,8 +91,8 @@ private extension Lexer {
                 goToNextChar()
             }
 
-            if let numberDoubleValue = Double(number) {
-                return .number(numberDoubleValue)
+            if let numberValue = Number(number) {
+                return .number(numberValue)
             } else {
                 // TODO: invalid token?
             }
