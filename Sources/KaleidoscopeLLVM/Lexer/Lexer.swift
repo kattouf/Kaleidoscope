@@ -10,6 +10,7 @@ class Lexer {
         self.input = input
 
         self.iterator = input.makeIterator()
+        goToNextChar()
     }
 
     func getTokens() -> [Token] {
@@ -26,8 +27,6 @@ class Lexer {
 private extension Lexer {
 
     func nextToken() -> Token? {
-        goToNextChar()
-
         // skip whitespaces
         while let char = currentChar, char.isSpace {
             goToNextChar()
@@ -38,7 +37,7 @@ private extension Lexer {
         }
 
         // skip comment
-        if char == "#" {
+        if char.isSharp {
             while let char = currentChar, !char.isNewline {
                 goToNextChar()
             }
@@ -46,16 +45,16 @@ private extension Lexer {
 
         // check for one-character tokens
         // Punctuation
-        if char == Punctuation.leftParen.rawValue { return .punctuation(.leftParen) }
-        if char == Punctuation.rightParen.rawValue { return .punctuation(.rightParen) }
-        if char == Punctuation.comma.rawValue { return .punctuation(.comma) }
-        if char == Punctuation.semicolon.rawValue { return .punctuation(.semicolon) }
+        if char == Punctuation.leftParen.rawValue { goToNextChar(); return .punctuation(.leftParen) }
+        if char == Punctuation.rightParen.rawValue { goToNextChar(); return .punctuation(.rightParen) }
+        if char == Punctuation.comma.rawValue { goToNextChar(); return .punctuation(.comma) }
+        if char == Punctuation.semicolon.rawValue { goToNextChar(); return .punctuation(.semicolon) }
         // BinaryOperator
-        if char == BinaryOperator.plus.rawValue { return .operator(.plus) }
-        if char == BinaryOperator.minus.rawValue { return .operator(.minus) }
-        if char == BinaryOperator.multiply.rawValue { return .operator(.multiply) }
-        if char == BinaryOperator.divide.rawValue { return .operator(.divide) }
-        if char == BinaryOperator.mod.rawValue { return .operator(.mod) }
+        if char == BinaryOperator.plus.rawValue { goToNextChar(); return .operator(.plus) }
+        if char == BinaryOperator.minus.rawValue { goToNextChar(); return .operator(.minus) }
+        if char == BinaryOperator.multiply.rawValue { goToNextChar(); return .operator(.multiply) }
+        if char == BinaryOperator.divide.rawValue { goToNextChar(); return .operator(.divide) }
+        if char == BinaryOperator.mod.rawValue { goToNextChar(); return .operator(.mod) }
 
         // check for identifier or keyword
         if char.isAlpha {
@@ -101,6 +100,10 @@ private extension Lexer {
 }
 
 private extension Character {
+
+    var isSharp: Bool {
+        return self == "#"
+    }
 
     var isDot: Bool {
         return self == "."
