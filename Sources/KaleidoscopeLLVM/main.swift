@@ -1,3 +1,8 @@
 import LLVM
 
-print(Lexer(input: "def foo(n) (n * 100.35);").getTokens())
+let input = """
+def foo(n) (n * 100.35);
+# hui
+extern double(x) (x * x)
+"""
+print(Lexer(input: input).getTokens())

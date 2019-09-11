@@ -45,15 +45,16 @@ private extension Lexer {
             goToNextChar()
         }
 
-        guard let char = currentChar else {
-            return nil
-        }
-
         // skip comment
-        if char.isSharp {
+        if currentChar?.isSharp == true {
             while let char = currentChar, !char.isNewline {
                 goToNextChar()
             }
+            goToNextChar()
+        }
+
+        guard let char = currentChar else {
+            return nil
         }
 
         // check for one-character tokens
