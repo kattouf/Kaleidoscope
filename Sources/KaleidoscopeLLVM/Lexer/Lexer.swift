@@ -24,7 +24,20 @@ class Lexer {
     }
 }
 
+// MARK: - Private
 private extension Lexer {
+
+    static var oneCharacterTokenMap: [Character: Token] = [
+        Punctuation.leftParen.rawValue: .punctuation(.leftParen),
+        Punctuation.rightParen.rawValue: .punctuation(.rightParen),
+        Punctuation.comma.rawValue: .punctuation(.comma),
+        Punctuation.semicolon.rawValue: .punctuation(.semicolon),
+        BinaryOperator.plus.rawValue: .operator(.plus),
+        BinaryOperator.minus.rawValue: .operator(.minus),
+        BinaryOperator.multiply.rawValue: .operator(.multiply),
+        BinaryOperator.divide.rawValue: .operator(.divide),
+        BinaryOperator.mod.rawValue: .operator(.mod)
+    ]
 
     func nextToken() -> Token? {
         // skip whitespaces
@@ -44,17 +57,10 @@ private extension Lexer {
         }
 
         // check for one-character tokens
-        // Punctuation
-        if char == Punctuation.leftParen.rawValue { goToNextChar(); return .punctuation(.leftParen) }
-        if char == Punctuation.rightParen.rawValue { goToNextChar(); return .punctuation(.rightParen) }
-        if char == Punctuation.comma.rawValue { goToNextChar(); return .punctuation(.comma) }
-        if char == Punctuation.semicolon.rawValue { goToNextChar(); return .punctuation(.semicolon) }
-        // BinaryOperator
-        if char == BinaryOperator.plus.rawValue { goToNextChar(); return .operator(.plus) }
-        if char == BinaryOperator.minus.rawValue { goToNextChar(); return .operator(.minus) }
-        if char == BinaryOperator.multiply.rawValue { goToNextChar(); return .operator(.multiply) }
-        if char == BinaryOperator.divide.rawValue { goToNextChar(); return .operator(.divide) }
-        if char == BinaryOperator.mod.rawValue { goToNextChar(); return .operator(.mod) }
+        if let oneCharacterToken = Lexer.oneCharacterTokenMap[char] {
+            goToNextChar()
+            return oneCharacterToken
+        }
 
         // check for identifier or keyword
         if char.isAlpha {
@@ -99,6 +105,7 @@ private extension Lexer {
     }
 }
 
+// MARK: - Character helper
 private extension Character {
 
     var isSharp: Bool {
