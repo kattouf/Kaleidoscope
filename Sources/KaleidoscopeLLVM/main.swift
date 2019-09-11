@@ -1,3 +1,3 @@
 import LLVM
 
-print("Hello, world!")
+print(Lexer(input: "def foo(n) (n * 100.35);").getTokens())
