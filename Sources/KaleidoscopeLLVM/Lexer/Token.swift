@@ -2,7 +2,7 @@ import Foundation
 
 typealias Number = Double
 
-enum Token {
+enum Token: Equatable {
     case punctuation(Punctuation)
     case keyword(Keyword)
     case `operator`(BinaryOperator)
@@ -10,14 +10,14 @@ enum Token {
     case number(Number)
 }
 
-enum Punctuation: Character {
+enum Punctuation: Character, Equatable {
     case leftParen = "("
     case rightParen = ")"
     case comma = ","
     case semicolon = ";"
 }
 
-enum Keyword: String {
+enum Keyword: String, Equatable {
     case def
     case extern
     case `if`
@@ -25,7 +25,7 @@ enum Keyword: String {
     case `else`
 }
 
-enum BinaryOperator: Character {
+enum BinaryOperator: Character, Equatable {
     case plus = "+"
     case minus = "-"
     case multiply = "*"
