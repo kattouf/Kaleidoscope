@@ -6,7 +6,7 @@ struct FuncPrototype {
 }
 
 struct FuncDefinition {
-    let prototype: Prototype
+    let prototype: FuncPrototype
     let expr: Expr
 }
 
