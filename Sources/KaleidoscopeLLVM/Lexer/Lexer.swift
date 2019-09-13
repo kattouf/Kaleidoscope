@@ -10,7 +10,7 @@ class Lexer {
         self.input = input
 
         self.iterator = input.makeIterator()
-        goToNextChar()
+        takeFirstChar()
     }
 
     func getTokens() -> [Token] {
@@ -99,6 +99,10 @@ private extension Lexer {
         }
 
         return nil
+    }
+
+    func takeFirstChar() {
+        goToNextChar()
     }
 
     func goToNextChar() {
