@@ -1,6 +1,11 @@
 import Foundation
 
-class Lexer {
+final class Lexer {
+
+    enum Error: Swift.Error {
+        case invalidNumber(String)
+    }
+
     private let input: String
 
     private var iterator: String.Iterator
@@ -10,13 +15,13 @@ class Lexer {
         self.input = input
 
         self.iterator = input.makeIterator()
-        takeFirstChar()
     }
 
-    func getTokens() -> [Token] {
+    func getTokens() throws -> [Token] {
         var tokens: [Token] = []
 
-        while let token = nextToken() {
+        takeFirstChar()
+        while let token = try nextToken() {
             tokens.append(token)
         }
 
@@ -25,9 +30,10 @@ class Lexer {
 }
 
 // MARK: - Private
+
 private extension Lexer {
 
-    static var oneCharacterTokenMap: [Character: Token] = [
+    static var oneCharacterTokenRawValueMap: [Character: Token] = [
         Punctuation.leftParen.rawValue: .punctuation(.leftParen),
         Punctuation.rightParen.rawValue: .punctuation(.rightParen),
         Punctuation.comma.rawValue: .punctuation(.comma),
@@ -39,7 +45,15 @@ private extension Lexer {
         BinaryOperator.mod.rawValue: .operator(.mod)
     ]
 
-    func nextToken() -> Token? {
+    static var keywordRawValueMap: [String: Token] = [
+        Keyword.def.rawValue: .keyword(.def),
+        Keyword.extern.rawValue: .keyword(.extern),
+        Keyword.if.rawValue: .keyword(.if),
+        Keyword.then.rawValue: .keyword(.then),
+        Keyword.else.rawValue: .keyword(.else)
+    ]
+
+    func nextToken() throws -> Token? {
         // skip whitespaces
         while let char = currentChar, char.isSpace {
             goToNextChar()
@@ -58,7 +72,7 @@ private extension Lexer {
         }
 
         // check for one-character tokens
-        if let oneCharacterToken = Lexer.oneCharacterTokenMap[char] {
+        if let oneCharacterToken = Lexer.oneCharacterTokenRawValueMap[char] {
             goToNextChar()
             return oneCharacterToken
         }
@@ -73,11 +87,9 @@ private extension Lexer {
             }
 
             // check for keywords
-            if identifier == Keyword.def.rawValue { return .keyword(.def) }
-            if identifier == Keyword.extern.rawValue { return .keyword(.extern) }
-            if identifier == Keyword.if.rawValue { return .keyword(.if) }
-            if identifier == Keyword.then.rawValue { return .keyword(.then) }
-            if identifier == Keyword.else.rawValue { return .keyword(.else) }
+            if let keyword = Lexer.keywordRawValueMap[identifier] {
+                return keyword
+            }
 
             return .identifier(identifier)
         }
@@ -94,7 +106,7 @@ private extension Lexer {
             if let numberValue = Number(number) {
                 return .number(numberValue)
             } else {
-                // TODO: invalid token?
+                throw Error.invalidNumber(number)
             }
         }
 
@@ -111,6 +123,7 @@ private extension Lexer {
 }
 
 // MARK: - Character helper
+
 private extension Character {
 
     var isSharp: Bool {

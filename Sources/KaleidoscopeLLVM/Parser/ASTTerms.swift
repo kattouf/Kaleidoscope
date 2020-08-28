@@ -11,9 +11,10 @@ struct FuncDefinition {
 }
 
 indirect enum Expr {
-    case number(Double)
+    case number(Number)
     case variable(String)
     case binary(Expr, BinaryOperator, Expr)
     case call(String, [Expr])
     case ifelse(Expr, Expr, Expr)
+//    case equals
 }

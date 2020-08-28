@@ -1,7 +1,5 @@
 import Foundation
 
-typealias Number = Double
-
 enum Token: Equatable {
     case punctuation(Punctuation)
     case keyword(Keyword)

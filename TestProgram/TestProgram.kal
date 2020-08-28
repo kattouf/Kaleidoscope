@@ -1,0 +1,4 @@
+extern sqrt(n);
+def foo(n) (n + n);
+def bar(x) (x * x);
+bar(foo(2)) + 3;
